@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+targetNamespace="http://www.w3school.com.cn"
+xmlns="http://www.w3school.com.cn"
+elementFormDefault="qualified">
+
+	<!-- 简易元素定义 -->
+	<xs:element name="name" type="xs:string"/>                         <!-- 名称元素 -->
+	<xs:element name="desc" type="xs:string"/>                         <!-- 描述元素 -->
+	<xs:element name="target" type="xs:string"/>                       <!-- 连接点的目标元素: 指向某个节点id-->
+	<xs:element name="role">                                           <!-- 连接点角色元素：定义连接点输入来源或者目的地 -->
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="SRC"/>
+			<xs:enumeration value="DST"/>
+		</xs:restriction>
+	</xs:element>
+	<xs:element name="position">                                       <!-- 节点位置（示例格式：80,165） -->
+		<xs:restriction base="xs:string">
+			<xs:pattern value="([0-9])+[,]([0-9])+"/>  
+		</xs:restriction>
+	</xs:element>
+
+	<!-- 属性定义 -->
+	<xs:attribute name="guid" type="xs:string"/>                       <!-- guid唯一标识符 -->
+	<xs:attribute name="path" type="xs:string"/>                       <!-- 路径 -->
+	<xs:attribute name="cdate" type="xs:dateTime"/>                    <!-- 创建时间 -->
+	<xs:attribute name="mdate" type="xs:dateTime"/>                    <!-- 修改时间 -->
+	<xs:attribute name="author" type="xs:string"/>                     <!-- 作者 -->
+	<xs:attribute name="version" type="xs:string"/>	                   <!-- 版本号 -->
+	<xs:attribute name="kind" type="xs:string"/>                       <!-- 类别 -->
+	<xs:attribute name="id" type="xs:string"/>                         <!-- id -->
+	<xs:attribute name="type">                                         <!-- 目前项目类型只有UML和FACE两种 -->
+		    <xs:restriction base="xs:string">
+	   		    <xs:enumeration value="UML"/>
+	  	   		<xs:enumeration value="FACE"/>
+   			</xs:restriction>
+	</xs:attribute>
+
+	<!-- 复合元素定义 -->
+	<xs:element name="atom" type="atominfo"/>                          <!-- 原子元素 -->
+	<xs:element name="reference" type="referenceinfo"/>                <!-- 参考元素 -->
+	<xs:element name="connection" type="connectionType"/>              <!-- 连接元素 -->
+	<xs:element name="connpoint" type="connpointType"/>                <!-- 连接点元素 -->
+	<xs:element name="model" type="modelinfo"/>                        <!-- 模型元素 -->		
+	<xs:element name="folder" type="folderType"/>                      <!-- 文件夹元素 -->
+	<xs:element name="project" type="projectinfo"/>                    <!-- 项目元素 -->
+
+	<!-- 个复合元素的复合类型定义 -->
+	<xs:complexType name="nodeinfo">                         <!-- atom\reference\model节点公共信息复合类型 -->
+		<xs:sequence>
+			<xs:element ref="name" use="required"/> <!-- 名称 -->
+			<xs:element ref="position" use="required" default="0,0"/> 
+			<xs:element ref="desc"/>
+		</xs:sequence>
+	</xs:complexType>
+	
+	<xs:complexType name="atominfo">                          <!-- 原子复合类型 -->
+		<xs:attribute ref="guid" use="required"/>
+		<xs:attribute ref="kind" use="required"/>
+		<xs:attribute ref="id" use="required"/>
+		<xs:extension base="nodeinfo"/>
+	</xs:complexType>
+
+	<xs:complexType name="referenceinfo">                     <!-- 参考复合类型 -->
+		<xs:attribute ref="guid" use="required"/>
+		<xs:attribute ref="kind" use="required"/>
+		<xs:attribute ref="id" use="required"/>
+		<xs:extension base="nodeinfo"/>
+	</xs:complexType>
+
+	<xs:complexType name="connectionType">                   <!-- 连接复合类型 -->
+		<xs:attribute ref="guid" use="required"/>
+		<xs:attribute ref="kind" use="required"/>
+		<xs:attribute ref="id" use="required"/>
+		<xs:sequence>
+			<xs:element ref="name"/>
+			<xs:element ref="connpoint"  maxOccurs="2"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="connpointType">                    <!-- 连接点复合类型 -->
+		<xs:sequence>
+			<xs:element name="role" use="required"/>
+			<xs:element ref="target" use="required"/>
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="modelinfo">                       <!-- 模型复合类型 -->
+		<xs:attribute ref="guid" use="required"/>
+		<xs:attribute ref="kind" use="required"/>
+		<xs:attribute ref="id" use="required"/>
+		<xs:extension base="nodeinfo">
+			<xs:sequence>
+				<xs:element ref="atom" maxOccurs="unbounded"/>
+				<xs:element ref="model" maxOccurs="unbounded"/>
+				<xs:element ref="reference" maxOccurs="unbounded"/>
+				<xs:element ref="connection" maxOccurs="unbounded"/>
+			</xs:sequence>
+		</xs:extension>
+	</xs:complexType>
+
+	<xs:complexType name="folderType">                      <!-- 文件夹复合类型 -->
+		<xs:attribute ref="guid" use="required"/>
+		<xs:attribute ref="id" use="required"/>
+		<xs:attribute ref="kind" use="required"/>
+		<xs:sequence>
+			<xs:element ref="model" use="required" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="projectinfo">                     <!-- 项目复合类型 -->
+		<xs:attribute ref="guid" use="required"/>
+		<xs:attribute ref="path" use="required"/>
+		<xs:attribute ref="cdate" use="required"/>
+		<xs:attribute ref="mdate" use="required"/>
+		<xs:attribute ref="author" use="required"/>
+		<xs:attribute ref="version" use="required" default="1.0.0"/>
+		<xs:attribute ref="type" use="required"/>  
+		<xs:sequence>
+			<xs:element ref="name" use="required"/>
+			<xs:element ref="folder" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element ref="atom" maxOccurs="unbounded"/>
+			<xs:element ref="model" maxOccurs="unbounded"/>
+			<xs:element ref="reference" maxOccurs="unbounded"/>
+			<xs:element ref="connection" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType> 	
+
+</xs:schema>

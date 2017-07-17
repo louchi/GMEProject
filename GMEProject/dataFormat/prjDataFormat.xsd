@@ -7,6 +7,7 @@ elementFormDefault="qualified">
 	<!-- 简易元素定义 -->
 	<xs:element name="name" type="xs:string"/>                         <!-- 名称元素 -->
 	<xs:element name="desc" type="xs:string"/>                         <!-- 描述元素 -->
+	<xs:element name="subnodefilepath" type="xs:string"/>              <!-- 对于模型元素，其子节点图形定义文件路径 -->
 	<xs:element name="target" type="xs:string"/>                       <!-- 连接点的目标元素: 指向某个节点id-->
 	<xs:element name="role">                                           <!-- 连接点角色元素：定义连接点输入来源或者目的地 -->
 		<xs:simpleType >
@@ -43,6 +44,7 @@ elementFormDefault="qualified">
 	</xs:attribute>
 
 	<!-- 复合元素定义 -->
+	<xs:element name="regnode" type="regnodeType"/>  <!-- 节点：可用于定义扩展的属性值 -->
 	<xs:element name="atom" type="atominfo"/>                          <!-- 原子元素 -->
 	<xs:element name="reference" type="referenceinfo"/>                <!-- 参考元素 -->
 	<xs:element name="connection" type="connectionType"/>              <!-- 连接元素 -->
@@ -52,11 +54,21 @@ elementFormDefault="qualified">
 	<xs:element name="project" type="projectinfo"/>                    <!-- 项目元素 -->
 
 	<!-- 个复合元素的复合类型定义 -->
+	<xs:complexType name="regnodeType">              <!-- 节点类型定义 -->
+		<xs:attribute ref="id" use="required"/>
+		<xs:sequence>
+			<xs:element ref="name"/>
+			<xs:element ref="value"/>
+			<xs:element ref="regnode" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+
 	<xs:complexType name="nodeinfo">                         <!-- atom\reference\model节点公共信息复合类型 -->
 		<xs:sequence>
 			<xs:element ref="name" use="required"/> <!-- 名称 -->
 			<xs:element ref="position" use="required" default="0,0"/> 
-			<xs:element ref="desc"/>
+			<xs:element ref="desc" minOccurs="0"/>
+			<xs:element ref="regnode" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 	</xs:complexType>
 	
@@ -96,6 +108,7 @@ elementFormDefault="qualified">
 		<xs:attribute ref="id" use="required"/>
 		<xs:extension base="nodeinfo">
 			<xs:sequence>
+				<xs:element ref="subnodefilepath"/>
 				<xs:element ref="atom" maxOccurs="unbounded"/>
 				<xs:element ref="model" maxOccurs="unbounded"/>
 				<xs:element ref="reference" maxOccurs="unbounded"/>
@@ -109,6 +122,7 @@ elementFormDefault="qualified">
 		<xs:attribute ref="id" use="required"/>
 		<xs:attribute ref="kind" use="required"/>
 		<xs:sequence>
+			<xs:element ref="regnode" minOccurs="0" maxOccurs="unbounded"/>
 			<xs:element ref="model" use="required" maxOccurs="unbounded"/>
 		</xs:sequence>
 	</xs:complexType>

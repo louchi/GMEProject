@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+targetNamespace="http://www.w3school.com.cn"
+xmlns="http://www.w3school.com.cn"
+elementFormDefault="qualified">
+
+	<!-- 简易元素定义 -->
+	<xs:element name="name" type="xs:strig"/>        <!-- 名称 -->
+	<xs:element name="value" type="xs:string"/>      <!-- 值 -->
+	<xs:element name="classpath" type="xs:string"/>  <!-- 图形类定义路径 -->
+	<xs:element name="src" type="xs:string"/>        <!-- 来源：线条元素的起点 -->
+	<xs:element name="dest" type="xs:string"/>       <!-- 目的：线条元素的终点 -->
+
+	<!-- 属性定义 -->
+	<xs:attribute name="id" type="xs:string"/>       <!-- id -->
+
+	<!-- 复合元素定义 -->
+	<xs:element name="regnode" type="regnodeType"/>  <!-- 节点：可用于定义扩展的属性值 -->
+	<xs:element name="shape" type="shapeType"/>       <!-- 图形元素 -->
+	<xs:element name="line" type="lineType"/>        <!-- 线条元素 -->
+
+	<!-- 类型定义 -->
+	<xs:complexType name="regnodeType">              <!-- 节点类型定义 -->
+		<xs:attribute ref="id" use="required"/>
+		<xs:sequence>
+			<xs:element ref="name"/>
+			<xs:element ref="value"/>
+			<xs:element ref="regnode" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="shapeType">                <!-- 图形元素类型定义 -->
+		<xs:attribute ref="id" use="required"/>
+		<xs:sequence>
+			<xs:element ref="name"/>
+			<xs:element ref="classpath"/>
+			<xs:element ref="regnode" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="lineType">                 <!-- 线条元素类型定义 -->
+		<xs:attribute ref="id" use="required"/>
+		<xs:sequence>
+			<xs:element ref="name"/>
+			<xs:element ref="classpath"/>
+			<xs:element ref="regnode" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element ref="src"/>
+			<xs:element ref="dest"/>
+		</xs:sequence>
+	</xs:complexType>
+
+</xs:schema>

@@ -9,15 +9,19 @@ elementFormDefault="qualified">
 	<xs:element name="desc" type="xs:string"/>                         <!-- 描述元素 -->
 	<xs:element name="target" type="xs:string"/>                       <!-- 连接点的目标元素: 指向某个节点id-->
 	<xs:element name="role">                                           <!-- 连接点角色元素：定义连接点输入来源或者目的地 -->
-		<xs:restriction base="xs:string">
-			<xs:enumeration value="SRC"/>
-			<xs:enumeration value="DST"/>
-		</xs:restriction>
+		<xs:simpleType >
+			<xs:restriction base="xs:string">
+				<xs:enumeration value="SRC"/>
+				<xs:enumeration value="DST"/>
+			</xs:restriction>
+		</xs:simpleType >
 	</xs:element>
 	<xs:element name="position">                                       <!-- 节点位置（示例格式：80,165） -->
-		<xs:restriction base="xs:string">
-			<xs:pattern value="([0-9])+[,]([0-9])+"/>  
-		</xs:restriction>
+		<xs:simpleType >
+			<xs:restriction base="xs:string">
+				<xs:pattern value="([0-9])+[,]([0-9])+"/>  
+			</xs:restriction>
+		</xs:simpleType >
 	</xs:element>
 
 	<!-- 属性定义 -->
@@ -30,10 +34,12 @@ elementFormDefault="qualified">
 	<xs:attribute name="kind" type="xs:string"/>                       <!-- 类别 -->
 	<xs:attribute name="id" type="xs:string"/>                         <!-- id -->
 	<xs:attribute name="type">                                         <!-- 目前项目类型只有UML和FACE两种 -->
+		<xs:simpleType >
 		    <xs:restriction base="xs:string">
 	   		    <xs:enumeration value="UML"/>
 	  	   		<xs:enumeration value="FACE"/>
    			</xs:restriction>
+   		</xs:simpleType>
 	</xs:attribute>
 
 	<!-- 复合元素定义 -->

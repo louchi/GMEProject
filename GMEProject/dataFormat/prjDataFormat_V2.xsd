@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+targetNamespace="http://www.w3school.com.cn"
+xmlns="http://www.w3school.com.cn"
+elementFormDefault="qualified">
+
+<!-- 简易元素定义 -->
+	<xs:element name="name" type="xs:string"/>                         <!-- 名称元素 -->
+	<xs:element name="desc" type="xs:string"/>                         <!-- 描述元素 -->
+	<xs:element name="layoutpath" type="xs:string"/>                   <!-- 对于模型元素，其子节点图形定义文件路径 -->
+	<xs:element name="target" type="xs:string"/>                       <!-- 连接点的目标元素: 指向某个节点id-->
+	<xs:element name="role">                                           <!-- 连接点角色元素：定义连接点输入来源或者目的地 -->
+		<xs:simpleType >
+			<xs:restriction base="xs:string">
+				<xs:enumeration value="SRC"/>
+				<xs:enumeration value="DST"/>
+			</xs:restriction>
+		</xs:simpleType >
+	</xs:element>
+	<xs:element name="position">                                       <!-- 节点位置（示例格式：80,165） -->
+		<xs:simpleType>
+			<xs:restriction base="xs:string">
+				<xs:pattern value="([0-9])+[,]([0-9])+"/>  
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+
+	<!-- 属性定义 -->
+	<xs:attribute name="guid" type="xs:string"/>                       <!-- guid唯一标识符 -->
+	<xs:attribute name="path" type="xs:string"/>                       <!-- 路径 -->
+	<xs:attribute name="cdate" type="xs:dateTime"/>                    <!-- 创建时间 -->
+	<xs:attribute name="mdate" type="xs:dateTime"/>                    <!-- 修改时间 -->
+	<xs:attribute name="author" type="xs:string"/>                     <!-- 作者 -->
+	<xs:attribute name="version" type="xs:string"/>	                   <!-- 版本号 -->
+	<xs:attribute name="kind" type="xs:string"/>                       <!-- 类别 -->
+	<xs:attribute name="id" type="xs:string"/>                         <!-- id -->
+	<xs:attribute name="type">                                         <!-- 目前项目类型只有UML和FACE两种 -->
+		<xs:simpleType >
+		    <xs:restriction base="xs:string">
+	   		    <xs:enumeration value="UML"/>
+	  	   		<xs:enumeration value="FACE"/>
+   			</xs:restriction>
+   		</xs:simpleType>
+	</xs:attribute>
+
+	<!-- 复合元素定义 -->
+	<xs:element name="layout">                                        <!-- 布局元素 -->
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="position"/>      <!-- 位置 -->
+				<xs:element ref="layoutpath"/>    <!-- 图形定义文件路径 -->
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="connpoint">                                     <!-- 连接点元素 -->
+		<xs:complexType>                    
+			<xs:sequence>
+				<xs:element name="role" use="required"/>
+				<xs:element ref="target" use="required"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="connection" type="connectionType">              <!-- 连接元素 -->
+		<xs:complexType name="connectionType">                  
+			<xs:attribute ref="guid" use="required"/>
+			<xs:attribute ref="kind" use="required"/>
+			<xs:attribute ref="id" use="required"/>
+			<xs:sequence>
+				<xs:element ref="name"/>
+				<xs:element ref="connpoint" maxOccurs="2"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="node" type="nodeType"/>                         <!-- 节点 -->	
+	<xs:complexType name="nodeType">
+		<xs:attribute ref="guid" use="required"/>
+		<xs:attribute ref="id" use="required"/>
+		<xs:attribute ref="kind" use="required"/>             <!-- 示例（Atom:QueuingChannel） -->
+		<xs:sequence>
+			<xs:element ref="name"/>
+			<xs:element ref="desc"/>
+			<xs:element ref="layout"/>                        <!-- 用于存放当前结点的子节点XML文件的路径 -->
+			<xs:element ref="node" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element ref="connection" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:element name="project" type="projectinfo"/>                   <!-- 项目元素 -->	
+	<xs:complexType name="projectinfo">                          
+		<xs:attribute ref="guid" use="required"/>
+		<xs:attribute ref="path" use="required"/>
+		<xs:attribute ref="cdate" use="required"/>
+		<xs:attribute ref="mdate" use="required"/>
+		<xs:attribute ref="author" use="required"/>
+		<xs:attribute ref="version" use="required" default="1.0.0"/>
+		<xs:attribute ref="type" use="required"/>  
+		<xs:sequence>
+			<xs:element ref="name"/>
+			<xs:element ref="desc"/>
+			<xs:element ref="node" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element ref="connection" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType> 
+
+</xs:schema>

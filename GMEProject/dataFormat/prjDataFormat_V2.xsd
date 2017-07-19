@@ -8,7 +8,7 @@ elementFormDefault="qualified">
 	<xs:element name="name" type="xs:string"/>                         <!-- 名称元素 -->
 	<xs:element name="desc" type="xs:string"/>                         <!-- 描述元素 -->
 	<xs:element name="layoutpath" type="xs:string"/>                   <!-- 对于模型元素，其子节点图形定义文件路径 -->
-	<xs:element name="target" type="xs:string"/>                       <!-- 连接点的目标元素: 指向某个节点id-->
+	<xs:element name="targetid" type="xs:string"/>                       <!-- 连接点的目标元素: 指向某个节点id-->
 	<xs:element name="role">                                           <!-- 连接点角色元素：定义连接点输入来源或者目的地 -->
 		<xs:simpleType >
 			<xs:restriction base="xs:string">
@@ -28,7 +28,7 @@ elementFormDefault="qualified">
 	<!-- 属性定义 -->
 	<xs:attribute name="guid" type="xs:string"/>                       <!-- guid唯一标识符 -->
 	<xs:attribute name="path" type="xs:string"/>                       <!-- 路径 -->
-	<xs:attribute name="cdate" type="xs:dateTime"/>                    <!-- 创建时间 -->
+	<xs:attribute name="cdate" type="xs:dateTime"/>                    <!-- 创建时间（日期格式例子：2002-05-30T09:00:00）-->
 	<xs:attribute name="mdate" type="xs:dateTime"/>                    <!-- 修改时间 -->
 	<xs:attribute name="author" type="xs:string"/>                     <!-- 作者 -->
 	<xs:attribute name="version" type="xs:string"/>	                   <!-- 版本号 -->
@@ -44,7 +44,7 @@ elementFormDefault="qualified">
 	</xs:attribute>
 
 	<!-- 复合元素定义 -->
-	<xs:element name="layout">                                        <!-- 布局元素 -->
+	<xs:element name="Layout">                                        <!-- 布局元素 -->
 		<xs:complexType>
 			<xs:sequence>
 				<xs:element ref="position"/>      <!-- 位置 -->
@@ -53,16 +53,16 @@ elementFormDefault="qualified">
 		</xs:complexType>
 	</xs:element>
 
-	<xs:element name="connpoint">                                     <!-- 连接点元素 -->
+	<xs:element name="Connpoint">                                     <!-- 连接点元素 -->
 		<xs:complexType>                    
 			<xs:sequence>
 				<xs:element name="role" use="required"/>
-				<xs:element ref="target" use="required"/>
+				<xs:element ref="targetid" use="required"/>
 			</xs:sequence>
 		</xs:complexType>
 	</xs:element>
 
-	<xs:element name="connection" type="connectionType">              <!-- 连接元素 -->
+	<xs:element name="Connection" type="connectionType">              <!-- 连接元素 -->
 		<xs:complexType name="connectionType">                  
 			<xs:attribute ref="guid" use="required"/>
 			<xs:attribute ref="kind" use="required"/>
@@ -74,7 +74,7 @@ elementFormDefault="qualified">
 		</xs:complexType>
 	</xs:element>
 
-	<xs:element name="node" type="nodeType"/>                         <!-- 节点 -->	
+	<xs:element name="Node" type="nodeType"/>                         <!-- 节点 -->	
 	<xs:complexType name="nodeType">
 		<xs:attribute ref="guid" use="required"/>
 		<xs:attribute ref="id" use="required"/>
@@ -82,15 +82,16 @@ elementFormDefault="qualified">
 		<xs:sequence>
 			<xs:element ref="name"/>
 			<xs:element ref="desc"/>
-			<xs:element ref="layout"/>                        <!-- 用于存放当前结点的子节点XML文件的路径 -->
-			<xs:element ref="node" minOccurs="0" maxOccurs="unbounded"/>
-			<xs:element ref="connection" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element ref="Layout"/>                        <!-- 用于存放当前结点的子节点XML文件的路径 -->
+			<xs:element ref="Node" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element ref="Connection" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 	</xs:complexType>
 
-	<xs:element name="project" type="projectinfo"/>                   <!-- 项目元素 -->	
+	<xs:element name="Project" type="projectinfo"/>                   <!-- 项目元素 -->	
 	<xs:complexType name="projectinfo">                          
 		<xs:attribute ref="guid" use="required"/>
+		<xs:attribute ref="id" use="required"/>
 		<xs:attribute ref="path" use="required"/>
 		<xs:attribute ref="cdate" use="required"/>
 		<xs:attribute ref="mdate" use="required"/>
@@ -100,8 +101,8 @@ elementFormDefault="qualified">
 		<xs:sequence>
 			<xs:element ref="name"/>
 			<xs:element ref="desc"/>
-			<xs:element ref="node" minOccurs="0" maxOccurs="unbounded"/>
-			<xs:element ref="connection" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element ref="Node" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element ref="Connection" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 	</xs:complexType> 
 

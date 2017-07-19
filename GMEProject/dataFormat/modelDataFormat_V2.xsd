@@ -4,14 +4,14 @@ targetNamespace="http://www.w3school.com.cn"
 xmlns="http://www.w3school.com.cn"
 elementFormDefault="qualified">
 
-<!-- 简单属性 -->
+<!-- 简单元素定义 -->
 <xs:element name="name" type="xs:string"/>                  <!-- 名称 -->
 <xs:element name="desc" type="xs:string"/>                  <!-- 描述 -->
 <xs:element name="value" type="xs:string"/>                 <!-- 属性值 -->
 <xs:element name="type" type="xs:string"/>                  <!-- 类型 -->
 
-<!-- 复合属性 -->
-<xs:element name="property">                                <!-- 属性 -->
+<!-- 复合元素 -->
+<xs:element name="Property">                                <!-- 属性 -->
 	<xs:complexType>
 		<xs:sequence>
 			<xs:element ref="name"/>
@@ -21,13 +21,13 @@ elementFormDefault="qualified">
 	</xs:complexType>
 </xs:element>
 
-<xs:element name="propertySet">                             <!-- 属性集 -->
+<xs:element name="PropertySet">                             <!-- 属性集 -->
 	<xs:complexType>
-		<xs:element ref="property" minOccurs="0" maxOccurs="unbounded"/>
+		<xs:element ref="Property" minOccurs="0" maxOccurs="unbounded"/>
 	</xs:complexType>
 </xs:element>
 
-<xs:element name="subnode">                                 <!-- 子节点：用于定义当前节点可新建的子节点类型 -->
+<xs:element name="Subnode">                                 <!-- 子节点：用于定义当前节点可新建的子节点类型 -->
 	<xs:complexType>
 		<xs:sequence>
 			<xs:element ref="name"/>
@@ -35,34 +35,38 @@ elementFormDefault="qualified">
 	</xs:complexType>
 </xs:element>
 
-<xs:element name="subnodeSet">                             <!-- 子节点集合 -->
+<xs:element name="SubnodeSet">                             <!-- 子节点集合 -->
 	<xs:complexType>
-		<xs:element ref="subnode" minOccurs="0" maxOccurs="unbounded"/>
+		<xs:element ref="Subnode" minOccurs="0" maxOccurs="unbounded"/>
 	</xs:complexType>
 </xs:element>
 
-<xs:element name="shape">                                  <!-- 图形元素：用于定义模型的图形相关信息，例如：图标路径等 -->
+<xs:element name="Shape">                                  <!-- 图形元素：用于定义模型的图形相关信息，例如：图标路径等 -->
 	<xs:element name="iconPath" type="xs:string"/>                  <!-- 图形图标路径 -->
 </xs:element>
 
-<xs:element name="node">                                   <!-- 节点 -->
+<xs:element name="Node">                                   <!-- 节点 -->
 	<xs:complexType>
 		<xs:attribute name="name" type="xs:string"/>                <!-- 名称 -->
 		<xs:attribute name="base" type="xs:string"/>                <!-- 基类 -->
 		<xs:attribute name="desc" type="xs:string"/>                <!-- 描述 -->
 		<xs:attribute name="id" type="xs:string"/>                  <!-- id -->
 		<xs:sequence>
-			<xs:element ref="subnodeSet"/>
-			<xs:element ref="shape"/>
-			<xs:element ref="propertySet"/>
+			<xs:element ref="SubnodeSet"/>
+			<xs:element ref="Shape"/>
+			<xs:element ref="PropertySet"/>
 		</xs:sequence>
 	</xs:complexType>
 </xs:element>
 
-<xs:element name="modelLib">                               <!-- 模型库：根节点 -->
+<xs:element name="ModelLib">                               <!-- 模型库：根节点 -->
 	<xs:complexType>
+		<xs:attribute name="name" type="xs:string"/>
+		<xs:attribute name="desc" type="xs:string"/>
+		<xs:attribute name="version" type="xs:string"/>
+		<xs:attribute name="id" type="xs:string"/>
 		<xs:sequence>
-			<xs:element ref="node" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element ref="Node" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 	</xs:complexType>
 </xs:element>

@@ -23,7 +23,9 @@ elementFormDefault="qualified">
 
 <xs:element name="PropertySet">                             <!-- 属性集 -->
 	<xs:complexType>
-		<xs:element ref="Property" minOccurs="0" maxOccurs="unbounded"/>
+		<xs:sequence>
+			<xs:element ref="Property" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
 	</xs:complexType>
 </xs:element>
 
@@ -37,39 +39,44 @@ elementFormDefault="qualified">
 
 <xs:element name="SubnodeSet">                             <!-- 子节点集合 -->
 	<xs:complexType>
-		<xs:element ref="Subnode" minOccurs="0" maxOccurs="unbounded"/>
+		<xs:sequence>
+			<xs:element ref="Subnode" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
 	</xs:complexType>
 </xs:element>
 
 <xs:element name="Shape">                                  <!-- 图形元素：用于定义模型的图形相关信息，例如：图标路径等 -->
-	<xs:element name="iconPath" type="xs:string"/>                  <!-- 图形图标路径 -->
+	<xs:complexType>
+		<xs:sequence>
+			<xs:element name="iconPath" type="xs:string"/>                  <!-- 图形图标路径 -->
+		</xs:sequence>
+	</xs:complexType>
 </xs:element>
 
 <xs:element name="Node">                                   <!-- 节点 -->
 	<xs:complexType>
-		<xs:attribute name="name" type="xs:string"/>                <!-- 名称 -->
-		<xs:attribute name="base" type="xs:string"/>                <!-- 基类 -->
-		<xs:attribute name="desc" type="xs:string"/>                <!-- 描述 -->
-		<xs:attribute name="id" type="xs:string"/>                  <!-- id -->
 		<xs:sequence>
 			<xs:element ref="SubnodeSet"/>
 			<xs:element ref="Shape"/>
 			<xs:element ref="PropertySet"/>
 		</xs:sequence>
+		<xs:attribute name="name" type="xs:string"/>                <!-- 名称 -->
+		<xs:attribute name="base" type="xs:string"/>                <!-- 基类 -->
+		<xs:attribute name="desc" type="xs:string"/>                <!-- 描述 -->
+		<xs:attribute name="id" type="xs:string"/>                  <!-- id -->
 	</xs:complexType>
 </xs:element>
 
 <xs:element name="ModelLib">                               <!-- 模型库：根节点 -->
 	<xs:complexType>
+		<xs:sequence>
+			<xs:element ref="Node" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
 		<xs:attribute name="name" type="xs:string"/>
 		<xs:attribute name="desc" type="xs:string"/>
 		<xs:attribute name="version" type="xs:string"/>
 		<xs:attribute name="id" type="xs:string"/>
-		<xs:sequence>
-			<xs:element ref="Node" minOccurs="0" maxOccurs="unbounded"/>
-		</xs:sequence>
 	</xs:complexType>
 </xs:element>
-
 
 </xs:schema>

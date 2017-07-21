@@ -31,7 +31,7 @@ elementFormDefault="qualified">
 	<xs:attribute name="cdate" type="xs:dateTime"/>                    <!-- 创建时间（日期格式例子：2002-05-30T09:00:00）-->
 	<xs:attribute name="mdate" type="xs:dateTime"/>                    <!-- 修改时间 -->
 	<xs:attribute name="author" type="xs:string"/>                     <!-- 作者 -->
-	<xs:attribute name="version" type="xs:string"/>	                   <!-- 版本号 -->
+	<xs:attribute name="version" type="xs:string" default="1.0.0"/>	                   <!-- 版本号 -->
 	<xs:attribute name="kind" type="xs:string"/>                       <!-- 类别 -->
 	<xs:attribute name="id" type="xs:string"/>                         <!-- id -->
 	<xs:attribute name="type">                                         <!-- 目前项目类型只有UML和FACE两种 -->
@@ -56,29 +56,26 @@ elementFormDefault="qualified">
 	<xs:element name="Connpoint">                                     <!-- 连接点元素 -->
 		<xs:complexType>                    
 			<xs:sequence>
-				<xs:element name="role" use="required"/>
-				<xs:element ref="targetid" use="required"/>
+				<xs:element name="role"/>
+				<xs:element ref="targetid"/>
 			</xs:sequence>
 		</xs:complexType>
 	</xs:element>
 
-	<xs:element name="Connection" type="connectionType">              <!-- 连接元素 -->
-		<xs:complexType name="connectionType">                  
+	<xs:element name="Connection">              <!-- 连接元素 -->
+		<xs:complexType>               
+			<xs:sequence>
+				<xs:element ref="name"/>
+				<xs:element ref="Connpoint" maxOccurs="2"/>
+			</xs:sequence>
 			<xs:attribute ref="guid" use="required"/>
 			<xs:attribute ref="kind" use="required"/>
 			<xs:attribute ref="id" use="required"/>
-			<xs:sequence>
-				<xs:element ref="name"/>
-				<xs:element ref="connpoint" maxOccurs="2"/>
-			</xs:sequence>
 		</xs:complexType>
 	</xs:element>
 
 	<xs:element name="Node" type="nodeType"/>                         <!-- 节点 -->	
-	<xs:complexType name="nodeType">
-		<xs:attribute ref="guid" use="required"/>
-		<xs:attribute ref="id" use="required"/>
-		<xs:attribute ref="kind" use="required"/>             <!-- 示例（Atom:QueuingChannel） -->
+	<xs:complexType name="nodeType">	
 		<xs:sequence>
 			<xs:element ref="name"/>
 			<xs:element ref="desc"/>
@@ -86,24 +83,27 @@ elementFormDefault="qualified">
 			<xs:element ref="Node" minOccurs="0" maxOccurs="unbounded"/>
 			<xs:element ref="Connection" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
+		<xs:attribute ref="guid" use="required"/>
+		<xs:attribute ref="id" use="required"/>
+		<xs:attribute ref="kind" use="required"/>             <!-- 示例（Atom:QueuingChannel） -->
 	</xs:complexType>
 
 	<xs:element name="Project" type="projectinfo"/>                   <!-- 项目元素 -->	
-	<xs:complexType name="projectinfo">                          
-		<xs:attribute ref="guid" use="required"/>
-		<xs:attribute ref="id" use="required"/>
-		<xs:attribute ref="path" use="required"/>
-		<xs:attribute ref="cdate" use="required"/>
-		<xs:attribute ref="mdate" use="required"/>
-		<xs:attribute ref="author" use="required"/>
-		<xs:attribute ref="version" use="required" default="1.0.0"/>
-		<xs:attribute ref="type" use="required"/>  
+	<xs:complexType name="projectinfo">                       
 		<xs:sequence>
 			<xs:element ref="name"/>
 			<xs:element ref="desc"/>
 			<xs:element ref="Node" minOccurs="0" maxOccurs="unbounded"/>
 			<xs:element ref="Connection" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
+		<xs:attribute ref="guid" use="required"/>
+		<xs:attribute ref="id" use="required"/>
+		<xs:attribute ref="path" use="required"/>
+		<xs:attribute ref="cdate" use="required"/>
+		<xs:attribute ref="mdate" use="required"/>
+		<xs:attribute ref="author" use="required"/>
+		<xs:attribute ref="version" use="required"/>
+		<xs:attribute ref="type" use="required"/> 
 	</xs:complexType> 
 
 </xs:schema>
